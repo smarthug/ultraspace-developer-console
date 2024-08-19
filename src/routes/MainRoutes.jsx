@@ -13,6 +13,7 @@ const DashboardDefault = Loadable(lazy(() => import('pages/dashboard/index')));
 // render - sample page
 const SamplePage = Loadable(lazy(() => import('pages/extra-pages/sample-page')));
 const SmartNPCsPage = Loadable(lazy(() => import('pages/smart-npcs/sample-page')));
+const CreateNFTsPage = Loadable(lazy(() => import('pages/create-nfts/sample-page')));
 
 // ==============================|| MAIN ROUTING ||============================== //
 
@@ -51,7 +52,7 @@ const MainRoutes = {
     },
     {
       path: 'create-nfts',
-      element: <SamplePage />
+      element: <CreateNFTsPage />
     },
     {
       path: 'smart-npcs',
