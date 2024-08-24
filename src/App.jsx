@@ -13,7 +13,7 @@ import { Networks, Wallet, XRPLClient } from '@nice-xrpl/react-xrpl';
 export default function App() {
   return (
     <XRPLClient network={Networks.Testnet}>
-      <Wallet seed="sEdTFUHfqARUpdhpLsrGaqZfTdDnxas">
+      <Wallet seed="sEdTbpveZCMG7HCxTF2mk439tWSkHUS">
         <ThemeCustomization>
           <ScrollTop>
             <RouterProvider router={router} />
