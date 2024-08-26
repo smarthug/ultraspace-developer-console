@@ -33,10 +33,17 @@ const utilities = {
       icon: icons.BarcodeOutlined
     },
     {
-      id: 'util-smart-nfts',
+      id: 'util-create-nfts',
       title: 'Create NFTs',
       type: 'item',
       url: '/create-nfts',
+      icon: icons.BarcodeOutlined
+    },
+    {
+      id: 'util-sell-nfts',
+      title: 'Sell NFTs',
+      type: 'item',
+      url: '/sell-nfts',
       icon: icons.BarcodeOutlined
     },
     // {

@@ -6,7 +6,7 @@ import { useIsConnected } from '@nice-xrpl/react-xrpl';
 import MainCard from 'components/MainCard';
 import { WalletBalance } from 'components/wallet-ui/wallet-balance';
 import { WalletInfo } from 'components/wallet-ui/wallet-info';
-import { WalletUI } from 'components/wallet-ui/wallet-ui-create-nfts';
+import { WalletUI } from 'components/wallet-ui/wallet-ui-sell-nfts';
 import { useEffect } from 'react';
 
 // ==============================|| SAMPLE PAGE ||============================== //
