@@ -69,11 +69,29 @@ const StyledActions = styled('div')(({ theme }) => ({
 
 const properties = ['normal', 'smart', 'lazy', 'weak', 'goodLooking', 'goodSleeper'];
 
-function CardItem({ info, onDelete, onAddProperties, onDeleteProperties }) {
-  const [edit, setEdit] = useState(false);
+function convertFormdata2Obj(formData) {
+  const object = {};
+  formData.forEach((value, key) => {
+    // Reflect.has in favor of: object.hasOwnProperty(key)
+    if (!Reflect.has(object, key)) {
+      object[key] = value;
+      return;
+    }
+    if (!Array.isArray(object[key])) {
+      object[key] = [object[key]];
+    }
+    object[key].push(value);
+  });
+  return object;
+}
 
-  function handleEdit() {
-    setEdit((prev) => !prev);
+function CardItem({ info, onDelete, onChange }) {
+  const [edit, setEdit] = useState(false);
+  const [props, setProps] = useState([...info.properties]);
+
+  function handleEdit(e) {
+    e.preventDefault();
+    setEdit(true);
   }
 
   function handleDelete() {
@@ -81,22 +99,48 @@ function CardItem({ info, onDelete, onAddProperties, onDeleteProperties }) {
   }
 
   function handleAdd() {
-    onAddProperties(info.name);
+    setProps((prev) => {
+      prev.push('');
+      return [...prev];
+    });
   }
 
   function handleDeleteProperties() {
-    onDeleteProperties(info.name);
+    setProps((prev) => {
+      prev.pop();
+      return [...prev];
+    });
+  }
+
+  function handleChangeProperties(e, idx) {
+    setProps((prev) => {
+      prev[idx] = e.target.value;
+      return [...prev];
+    });
+  }
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const _data = new FormData(e.target);
+    const _objData = convertFormdata2Obj(_data);
+    if (typeof _objData['properties'] === 'string') {
+      _objData['properties'] = [_objData['properties']];
+    }
+    onChange(info.id, _objData);
+    setEdit(false);
   }
 
   return (
-    <StyledCard>
+    <StyledCard onSubmit={handleSubmit} component="form">
       <div className="header">
-        {edit ? <TextField defaultValue={info.name} /> : <Typography>{info.name}</Typography>}
-        <Button onClick={handleEdit}>{edit ? 'Save' : 'Edit'}</Button>
+        {edit ? <TextField name="name" defaultValue={info.name} /> : <Typography>{info.name}</Typography>}
+        {edit ? <Button type="submit">Save</Button> : <Button onClick={handleEdit}>Edit</Button>}
       </div>
       <div className="history">
         <Typography>History</Typography>
-        <textarea defaultValue={info.history} disabled={!edit} />
+        <textarea name="history" defaultValue={info.history} disabled={!edit} />
       </div>
       <div className="properties">
         <div className="header">
@@ -109,13 +153,23 @@ function CardItem({ info, onDelete, onAddProperties, onDeleteProperties }) {
             Delete
           </Button>
         </div>
-        {info.properties.map((v, idx) => (
-          <Select key={idx} className="select-item" defaultValue={v} disabled={!edit}>
-            {properties.map((v, idx) => (
-              <MenuItem key={idx} value={v}>
-                {v}
-              </MenuItem>
-            ))}
+        {props.map((v, idx) => (
+          <Select
+            name="properties"
+            key={idx}
+            className="select-item"
+            // data-idx={idx}
+            onChange={(e) => handleChangeProperties(e, idx)}
+            value={v}
+            disabled={!edit}
+          >
+            {properties.map((p, idx) => {
+              return (
+                <MenuItem key={idx} value={p} disabled={!!props.find((v) => v === p)}>
+                  {p}
+                </MenuItem>
+              );
+            })}
           </Select>
         ))}
       </div>
@@ -139,31 +193,43 @@ export default function SamplePage() {
   function handleDelete(id) {
     setNpcs((prev) => {
       const _idx = prev.findIndex((v) => v.id === id);
-      console.log(_idx);
       prev.splice(_idx, 1);
       return [...prev];
     });
   }
 
-  function handleAddProperties(name) {
+  // function handleAddProperties(id) {
+  //   setNpcs((prev) => {
+  //     prev.map((v) => v.id === id && v.properties.push(''));
+
+  //     return [...prev];
+  //   });
+  // }
+
+  // function handleDeleteProperties(id) {
+  //   setNpcs((prev) => {
+  //     prev.map((v) => v.id === id && v.properties.pop());
+
+  //     return [...prev];
+  //   });
+  // }
+
+  function handleChangeValue(id, data) {
     setNpcs((prev) => {
-      prev.map((v) => v.name === name && v.properties.push('normal'));
-
-      return [...prev];
-    });
-  }
-
-  function handleDeleteProperties(name) {
-    setNpcs((prev) => {
-      prev.map((v) => v.name === name && v.properties.pop());
-
-      return [...prev];
+      return [
+        ...prev.map((v) => {
+          if (v.id === id) {
+            return { id: v.id, ...data };
+          }
+          return v;
+        })
+      ];
     });
   }
 
   useEffect(() => {
     setNpcs((prev) => {
-      prev.push({ history: 'test', properties: ['normal'], name: 'SmartNpc', id: nanoid() });
+      prev.push({ history: 'test', properties: [''], name: 'SmartNpc', id: nanoid() });
       return [...prev];
     });
   }, []);
@@ -171,16 +237,11 @@ export default function SamplePage() {
   return (
     <>
       {npcs.map((v, idx) => (
-        <CardItem
-          info={v}
-          key={idx}
-          onDelete={handleDelete}
-          onAddProperties={handleAddProperties}
-          onDeleteProperties={handleDeleteProperties}
-        />
+        <CardItem info={v} key={idx} onDelete={handleDelete} onChange={handleChangeValue} />
       ))}
       <StyledActions>
         <Button onClick={handleCreate}>Create</Button>
+        <Button>Upload</Button>
       </StyledActions>
     </>
   );
