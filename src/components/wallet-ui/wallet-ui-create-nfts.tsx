@@ -15,16 +15,20 @@ import { ShowNFT } from './show-nft';
 import { TransactionLog } from './transaction-log';
 import { WalletBalance } from './wallet-balance';
 import { WalletInfo } from './wallet-info';
+import { styled } from '@mui/material';
+
+const StyledDiv = styled("div")(({ theme }) => ({
+    border: '1px solid skyblue',
+    margin: '10px',
+    padding: '5px',
+    [`& > div`]: {
+        marginBottom: theme.spacing(1)
+    }
+}))
 
 export function WalletUI() {
     return (
-        <div
-            style={{
-                border: '1px solid skyblue',
-                margin: '10px',
-                padding: '5px',
-            }}
-        >
+        <StyledDiv>
             <WalletInfo />
             <Suspense fallback={<div>Loading Wallet UI</div>}>
                 <WalletBalance />
@@ -38,6 +42,6 @@ export function WalletUI() {
               
                 <TransactionLog />
             </Suspense>
-        </div>
+        </StyledDiv>
     );
 }
