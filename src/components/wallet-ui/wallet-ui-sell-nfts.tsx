@@ -1,32 +1,14 @@
-import { Suspense, useEffect, useRef, useState } from 'react';
-import { AcceptBrokerOffer } from './accept-brokered-offer';
-import { AcceptBuyOffer } from './accept-buy-nft';
-import { AcceptSellOffer } from './accept-sell-nft';
-import { BurnNFT } from './burn-nft';
-import { BuyNFT } from './buy-nft';
-import { CreateTrustline } from './create-trustline';
-import { CurrencyBalance } from './currency-balance';
-import { MintNFT } from './mint-nft';
-import OffersById from './offers-by-id';
-import { SellNFT } from './sell-nft';
-import { SendCurrency } from './send-currency';
-import { SendXRP } from './send-xrp';
-import { ShowNFT } from './show-nft';
-import { TransactionLog } from './transaction-log';
+import React, { Suspense, useEffect, useRef, useState } from 'react';
 import { WalletBalance } from './wallet-balance';
 import { WalletInfo } from './wallet-info';
 import {
-  Box,
   Button,
-  buttonBaseClasses,
   CircularProgress,
   IconButton,
   iconButtonClasses,
   InputBase,
   inputBaseClasses,
   MenuItem,
-  Popover,
-  Popper,
   Select,
   styled,
   TextField,
@@ -111,14 +93,13 @@ const StyledDiv = styled('div')(({ theme }) => ({
       marginRight: theme.spacing(1),
 
       width: '200px',
-      //   height: '300px',
+      height: "270px",
+      maxHeight: '300px',
       overflow: 'hidden auto',
+      scrollbarWidth: "none",
       [`& > .img`]: {
         width: '100%',
-        height: '150px'
-        // minHeight: '200px',
-        // maxHeight: '200px'
-        // flex: 3
+        minHeight: '150px'
       },
       [`& > .info`]: {
         flex: 1,
@@ -171,13 +152,11 @@ function ShowOffers({ id }: { id: string }) {
 
 function NFTTokenCard({ id, uri }) {
   const [info, setInfo] = useState(null);
-  const [sending, setSending] = useState(false);
   const createSellOffer = useCreateSellOffer();
   const burnToken = useBurnToken();
   const priceRef = useRef(null);
   const [buyLoading, setBuyLoading] = useState(false);
   const [sellLoading, setSellLoading] = useState(false);
-  // const [inputNftId, setInputNftId] = useState('');
   const [nftId, setNftId] = useState(null);
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [priceLoading, setPriceLoading] = useState(false);
@@ -209,21 +188,12 @@ function NFTTokenCard({ id, uri }) {
     } finally {
       setPriceLoading(false);
     }
-
-    // const tokens = await getTokens();
-    // console.log('UI: ', tokens);
   }
   useEffect(() => {
     fetch(uri)
+      .then((res) => res.json())
       .then((res) => {
-        const result = res.json();
-        //   console.log(result.img);
-        return result;
-      })
-      .then((res) => {
-        console.log(res);
         setInfo(res);
-        // setImg(res.image);
       });
   }, []);
 
@@ -233,7 +203,6 @@ function NFTTokenCard({ id, uri }) {
         <div className="img" style={{ background: `url(${info?.image})`, backgroundSize: 'cover', backgroundRepeat: 'no-repeat' }} />
       )}
       <div className="info">
-        {/* <Typography>{`Id: ${id}`}</Typography> */}
         <Typography style={{ marginBottom: '8px' }}>{`Name: ${info?.name}`}</Typography>
 
         <div className="sell-wrapper">
@@ -321,7 +290,7 @@ export function WalletUI() {
               );
             })}
           </Select>
-          <div className="search-input" component="form" elevation={0}>
+          <div className="search-input">
             <InputBase placeholder="검색" inputProps={{ 'aria-label': 'Find Job, ilhada' }} />
             <IconButton size="small" className="search" aria-label="search" type="submit">
               <SearchIcon />
@@ -330,19 +299,9 @@ export function WalletUI() {
         </div>
         <div className="content">
           {tokens.map((token) => (
-            <NFTTokenCard id={token.id} uri={token.uri} />
+            <NFTTokenCard key={token.id} id={token.id} uri={token.uri} />
           ))}
         </div>
-        {/* <CurrencyBalance /> */}
-
-        {/* <ShowNFT /> */}
-        {/* <BuyNFT /> */}
-        {/* <SellNFT /> */}
-        {/* <OffersById /> */}
-        {/* <AcceptBuyOffer /> */}
-        {/* <AcceptSellOffer /> */}
-        {/* <AcceptBrokerOffer /> */}
-        {/* <TransactionLog /> */}
       </Suspense>
     </StyledDiv>
   );

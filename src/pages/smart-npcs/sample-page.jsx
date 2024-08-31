@@ -1,10 +1,6 @@
 // material-ui
-import { Button, Card, Checkbox, FormControlLabel, FormGroup, MenuItem, Radio, RadioGroup, Select, styled, TextField } from '@mui/material';
-import Typography, { typographyClasses } from '@mui/material/Typography';
+import { Button, Card, Checkbox, FormControlLabel, FormGroup, styled, TextField, Typography } from '@mui/material';
 import { nanoid } from 'nanoid';
-
-// project import
-// import MainCard from 'components/MainCard';
 import { useEffect, useState } from 'react';
 
 const StyledCard = styled(Card)(({ theme }) => ({
@@ -15,28 +11,22 @@ const StyledCard = styled(Card)(({ theme }) => ({
   [`& > div`]: {
     display: 'flex',
     flexDirection: 'column',
-    marginBottom: theme.spacing(2),
-    // [`& > .${typographyClasses.root}`]: {
-    //   marginBottom: theme.spacing(1)
-    // }
+    marginBottom: theme.spacing(2)
   },
   [`& > .header`]: {
     flexDirection: 'row',
     width: '100%',
-    alignItems: "center",
-    // justifyContent: 'space-between',
+    alignItems: 'center',
     [`& > .dummy`]: {
       flex: 1
     }
   },
   [`& > .history`]: {
-    // flexDirection: 'column',
     [`& > textarea`]: {
       resize: 'vertical'
     }
   },
   [`& > .properties`]: {
-    // flexDirection: 'column'
     [`& > .header`]: {
       display: 'flex',
       flexDirection: 'row',
@@ -44,20 +34,18 @@ const StyledCard = styled(Card)(({ theme }) => ({
       [`& > .dummy`]: {
         flex: 1
       },
-      // justifyContent: 'space-between',
       marginBottom: theme.spacing(1)
     },
     [`& > .select-item`]: {
       marginBottom: theme.spacing(1)
     },
     [`& > .content`]: {
-      display: "flex",
-      flexDirection: "row",
+      display: 'flex',
+      flexDirection: 'row',
       [`& > .props-checkbox`]: {
-        display: "flex",
-        flexDirection: "row",
-        alignItems: "center"
-
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center'
       }
     }
   },
@@ -65,9 +53,6 @@ const StyledCard = styled(Card)(({ theme }) => ({
     width: '100%',
     justifyContent: 'flex-end',
     marginBottom: 'unset'
-    // [`& > .${buttonBaseClasses.root}`]: {
-    //   width: 'fit-content',
-    // }
   }
 }));
 
@@ -77,8 +62,6 @@ const StyledActions = styled('div')(({ theme }) => ({
   justifyContent: 'flex-end',
   marginTop: theme.spacing(2)
 }));
-
-// ==============================|| SAMPLE PAGE ||============================== //
 
 const properties = ['normal', 'smart', 'lazy', 'weak', 'goodLooking', 'goodSleeper'];
 
@@ -100,7 +83,6 @@ function convertFormdata2Obj(formData) {
 
 function CardItem({ info, onDelete, onChange }) {
   const [edit, setEdit] = useState(false);
-  // const [props, setProps] = useState([...info.properties]);
 
   function handleEdit(e) {
     e.preventDefault();
@@ -111,27 +93,6 @@ function CardItem({ info, onDelete, onChange }) {
     onDelete(info.id);
   }
 
-  // function handleAdd() {
-  //   setProps((prev) => {
-  //     prev.push('');
-  //     return [...prev];
-  //   });
-  // }
-
-  // function handleDeleteProperties() {
-  //   setProps((prev) => {
-  //     prev.pop();
-  //     return [...prev];
-  //   });
-  // }
-
-  // function handleChangeProperties(e, idx) {
-  //   setProps((prev) => {
-  //     prev[idx] = e.target.value;
-  //     return [...prev];
-  //   });
-  // }
-
   function handleSubmit(e) {
     e.preventDefault();
     e.stopPropagation();
@@ -139,12 +100,12 @@ function CardItem({ info, onDelete, onChange }) {
     const _data = new FormData(e.target);
     const _objData = convertFormdata2Obj(_data);
     console.log(_objData);
-    const _properties = []
+    const _properties = [];
     for (const [key, value] of Object.entries(_objData)) {
-      if (key === "name" || key === "history") {
+      if (key === 'name' || key === 'history') {
         continue;
       }
-      if (value === "on") {
+      if (value === 'on') {
         _properties.push(key);
       }
     }
@@ -153,10 +114,10 @@ function CardItem({ info, onDelete, onChange }) {
       _objData['properties'] = [_objData['properties']];
     }
     let newobj = {
-      name: _objData["name"],
-      history: _objData["history"],
+      name: _objData['name'],
+      history: _objData['history'],
       properties: _properties
-    }
+    };
     onChange(info.id, newobj);
     setEdit(false);
   }
@@ -165,58 +126,32 @@ function CardItem({ info, onDelete, onChange }) {
     <StyledCard onSubmit={handleSubmit} component="form">
       <div className="header">
         {edit ? <TextField label="name" name="name" defaultValue={info.name} /> : <Typography>{`Name: ${info.name}`}</Typography>}
-        <div className='dummy' />
+        <div className="dummy" />
         {!edit && <Button onClick={handleDelete}>Delete</Button>}
         {edit ? <Button type="submit">Done</Button> : <Button onClick={handleEdit}>Edit</Button>}
       </div>
       <div className="history">
-        <Typography style={{ marginBottom: "8px" }}>History</Typography>
+        <Typography style={{ marginBottom: '8px' }}>History</Typography>
         <textarea name="history" defaultValue={info.history} disabled={!edit} />
       </div>
       <div className="properties">
         <div className="header">
           <Typography>Properties</Typography>
         </div>
-        <div className='content'>
+        <div className="content">
           <FormGroup row name="properties">
             {properties.map((v, idx) => (
-              <FormControlLabel name={v} disabled={!edit} control={<Checkbox defaultChecked={!!info.properties.find((p) => p === v)} />} label={v} />
+              <FormControlLabel
+                key={idx}
+                name={v}
+                disabled={!edit}
+                control={<Checkbox defaultChecked={!!info.properties.find((p) => p === v)} />}
+                label={v}
+              />
             ))}
           </FormGroup>
         </div>
-        {/* <div className="header">
-          <Typography>Properties</Typography>
-          <div className="dummy" />
-          <Button disabled={!edit} onClick={handleAdd}>
-            Add
-          </Button>
-          <Button disabled={!edit} onClick={handleDeleteProperties}>
-            Delete
-          </Button>
-        </div>
-        {props.map((v, idx) => (
-          <Select
-            name="properties"
-            key={idx}
-            className="select-item"
-            // data-idx={idx}
-            onChange={(e) => handleChangeProperties(e, idx)}
-            value={v}
-            disabled={!edit}
-          >
-            {properties.map((p, idx) => {
-              return (
-                <MenuItem key={idx} value={p} disabled={!!props.find((v) => v === p)}>
-                  {p}
-                </MenuItem>
-              );
-            })}
-          </Select>
-        ))} */}
       </div>
-      {/* <div className="actions">
-        <Button onClick={handleDelete}>Delete</Button>
-      </div> */}
     </StyledCard>
   );
 }
@@ -238,22 +173,6 @@ export default function SamplePage() {
       return [...prev];
     });
   }
-
-  // function handleAddProperties(id) {
-  //   setNpcs((prev) => {
-  //     prev.map((v) => v.id === id && v.properties.push(''));
-
-  //     return [...prev];
-  //   });
-  // }
-
-  // function handleDeleteProperties(id) {
-  //   setNpcs((prev) => {
-  //     prev.map((v) => v.id === id && v.properties.pop());
-
-  //     return [...prev];
-  //   });
-  // }
 
   function handleChangeValue(id, data) {
     setNpcs((prev) => {
@@ -281,8 +200,10 @@ export default function SamplePage() {
         <CardItem info={v} key={idx} onDelete={handleDelete} onChange={handleChangeValue} />
       ))}
       <StyledActions>
-        <Button onClick={handleCreate}>Create</Button>
-        <Button>Upload</Button>
+        <Button variant="contained" style={{ marginRight: '8px' }} onClick={handleCreate}>
+          Create New
+        </Button>
+        <Button variant="contained">Commit</Button>
       </StyledActions>
     </>
   );
