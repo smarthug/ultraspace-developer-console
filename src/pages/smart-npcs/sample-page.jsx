@@ -1,5 +1,5 @@
 // material-ui
-import { Button, Card, MenuItem, Select, styled, TextField } from '@mui/material';
+import { Button, Card, Checkbox, FormControlLabel, FormGroup, MenuItem, Radio, RadioGroup, Select, styled, TextField } from '@mui/material';
 import Typography, { typographyClasses } from '@mui/material/Typography';
 import { nanoid } from 'nanoid';
 
@@ -16,15 +16,18 @@ const StyledCard = styled(Card)(({ theme }) => ({
     display: 'flex',
     flexDirection: 'column',
     marginBottom: theme.spacing(2),
-    [`& > .${typographyClasses.root}`]: {
-      marginBottom: theme.spacing(1)
-    }
+    // [`& > .${typographyClasses.root}`]: {
+    //   marginBottom: theme.spacing(1)
+    // }
   },
   [`& > .header`]: {
     flexDirection: 'row',
     width: '100%',
-    justifyContent: 'space-between',
-    alignItems: 'center'
+    alignItems: "center",
+    // justifyContent: 'space-between',
+    [`& > .dummy`]: {
+      flex: 1
+    }
   },
   [`& > .history`]: {
     // flexDirection: 'column',
@@ -46,6 +49,16 @@ const StyledCard = styled(Card)(({ theme }) => ({
     },
     [`& > .select-item`]: {
       marginBottom: theme.spacing(1)
+    },
+    [`& > .content`]: {
+      display: "flex",
+      flexDirection: "row",
+      [`& > .props-checkbox`]: {
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center"
+
+      }
     }
   },
   [`& > .actions`]: {
@@ -87,7 +100,7 @@ function convertFormdata2Obj(formData) {
 
 function CardItem({ info, onDelete, onChange }) {
   const [edit, setEdit] = useState(false);
-  const [props, setProps] = useState([...info.properties]);
+  // const [props, setProps] = useState([...info.properties]);
 
   function handleEdit(e) {
     e.preventDefault();
@@ -98,26 +111,26 @@ function CardItem({ info, onDelete, onChange }) {
     onDelete(info.id);
   }
 
-  function handleAdd() {
-    setProps((prev) => {
-      prev.push('');
-      return [...prev];
-    });
-  }
+  // function handleAdd() {
+  //   setProps((prev) => {
+  //     prev.push('');
+  //     return [...prev];
+  //   });
+  // }
 
-  function handleDeleteProperties() {
-    setProps((prev) => {
-      prev.pop();
-      return [...prev];
-    });
-  }
+  // function handleDeleteProperties() {
+  //   setProps((prev) => {
+  //     prev.pop();
+  //     return [...prev];
+  //   });
+  // }
 
-  function handleChangeProperties(e, idx) {
-    setProps((prev) => {
-      prev[idx] = e.target.value;
-      return [...prev];
-    });
-  }
+  // function handleChangeProperties(e, idx) {
+  //   setProps((prev) => {
+  //     prev[idx] = e.target.value;
+  //     return [...prev];
+  //   });
+  // }
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -125,25 +138,53 @@ function CardItem({ info, onDelete, onChange }) {
 
     const _data = new FormData(e.target);
     const _objData = convertFormdata2Obj(_data);
+    console.log(_objData);
+    const _properties = []
+    for (const [key, value] of Object.entries(_objData)) {
+      if (key === "name" || key === "history") {
+        continue;
+      }
+      if (value === "on") {
+        _properties.push(key);
+      }
+    }
+
     if (typeof _objData['properties'] === 'string') {
       _objData['properties'] = [_objData['properties']];
     }
-    onChange(info.id, _objData);
+    let newobj = {
+      name: _objData["name"],
+      history: _objData["history"],
+      properties: _properties
+    }
+    onChange(info.id, newobj);
     setEdit(false);
   }
 
   return (
     <StyledCard onSubmit={handleSubmit} component="form">
       <div className="header">
-        {edit ? <TextField name="name" defaultValue={info.name} /> : <Typography>{info.name}</Typography>}
-        {edit ? <Button type="submit">Save</Button> : <Button onClick={handleEdit}>Edit</Button>}
+        {edit ? <TextField label="name" name="name" defaultValue={info.name} /> : <Typography>{`Name: ${info.name}`}</Typography>}
+        <div className='dummy' />
+        {!edit && <Button onClick={handleDelete}>Delete</Button>}
+        {edit ? <Button type="submit">Done</Button> : <Button onClick={handleEdit}>Edit</Button>}
       </div>
       <div className="history">
-        <Typography>History</Typography>
+        <Typography style={{ marginBottom: "8px" }}>History</Typography>
         <textarea name="history" defaultValue={info.history} disabled={!edit} />
       </div>
       <div className="properties">
         <div className="header">
+          <Typography>Properties</Typography>
+        </div>
+        <div className='content'>
+          <FormGroup row name="properties">
+            {properties.map((v, idx) => (
+              <FormControlLabel name={v} disabled={!edit} control={<Checkbox defaultChecked={!!info.properties.find((p) => p === v)} />} label={v} />
+            ))}
+          </FormGroup>
+        </div>
+        {/* <div className="header">
           <Typography>Properties</Typography>
           <div className="dummy" />
           <Button disabled={!edit} onClick={handleAdd}>
@@ -171,11 +212,11 @@ function CardItem({ info, onDelete, onChange }) {
               );
             })}
           </Select>
-        ))}
+        ))} */}
       </div>
-      <div className="actions">
+      {/* <div className="actions">
         <Button onClick={handleDelete}>Delete</Button>
-      </div>
+      </div> */}
     </StyledCard>
   );
 }
@@ -185,7 +226,7 @@ export default function SamplePage() {
 
   function handleCreate() {
     setNpcs((prev) => {
-      prev.push({ history: '', properties: ['normal'], name: `SmartNpc`, id: nanoid() });
+      prev.push({ history: '', properties: [''], name: `SmartNpc`, id: nanoid() });
       return [...prev];
     });
   }

@@ -41,7 +41,7 @@ const utilities = {
     },
     {
       id: 'util-sell-nfts',
-      title: 'Sell NFTs',
+      title: 'Manage NFTs',
       type: 'item',
       url: '/sell-nfts',
       icon: icons.BarcodeOutlined
