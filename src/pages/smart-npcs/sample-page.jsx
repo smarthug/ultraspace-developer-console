@@ -156,16 +156,17 @@ function CardItem({ info, onDelete, onChange }) {
   );
 }
 
+// config smartNpcs
 export default function SamplePage() {
   const [npcs, setNpcs] = useState([]);
-
+  // create smartNpc instance
   function handleCreate() {
     setNpcs((prev) => {
       prev.push({ history: '', properties: [''], name: `SmartNpc`, id: nanoid() });
       return [...prev];
     });
   }
-
+  // delete smartNpc instance
   function handleDelete(id) {
     setNpcs((prev) => {
       const _idx = prev.findIndex((v) => v.id === id);
@@ -173,7 +174,7 @@ export default function SamplePage() {
       return [...prev];
     });
   }
-
+  // edit smartNpc instance
   function handleChangeValue(id, data) {
     setNpcs((prev) => {
       return [
@@ -189,7 +190,7 @@ export default function SamplePage() {
 
   useEffect(() => {
     setNpcs((prev) => {
-      prev.push({ history: 'test', properties: [''], name: 'SmartNpc', id: nanoid() });
+      prev.push({ history: '', properties: [''], name: 'SmartNpc', id: nanoid() });
       return [...prev];
     });
   }, []);

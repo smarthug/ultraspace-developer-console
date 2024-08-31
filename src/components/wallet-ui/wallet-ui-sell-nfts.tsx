@@ -163,14 +163,14 @@ function NFTTokenCard({ id, uri }) {
 
   const getBuyOffers = useGetBuyOffers();
   const getSellOffers = useGetSellOffers();
-
+  // burn nft
   async function handleOnClickDelete(e) {
     setDeleteLoading(true);
     const result = await burnToken(id);
     setDeleteLoading(false);
     window.location.reload();
   }
-
+  // create sell offer
   async function handleClickSell() {
     setPriceLoading(true);
     try {
@@ -189,6 +189,7 @@ function NFTTokenCard({ id, uri }) {
       setPriceLoading(false);
     }
   }
+  // fetching nft info
   useEffect(() => {
     fetch(uri)
       .then((res) => res.json())
@@ -264,6 +265,7 @@ function NFTTokenCard({ id, uri }) {
 }
 const sortinOptions = ['name', 'price'];
 
+// show NFTs user have
 export function WalletUI() {
   const tokens = useTokens();
 
@@ -291,7 +293,7 @@ export function WalletUI() {
             })}
           </Select>
           <div className="search-input">
-            <InputBase placeholder="검색" inputProps={{ 'aria-label': 'Find Job, ilhada' }} />
+            <InputBase placeholder="search" />
             <IconButton size="small" className="search" aria-label="search" type="submit">
               <SearchIcon />
             </IconButton>

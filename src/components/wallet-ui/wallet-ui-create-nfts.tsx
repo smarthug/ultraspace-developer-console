@@ -39,7 +39,8 @@ export function CreateForm() {
   const getTokens = useGetTokens();
   let navigate = useNavigate();
   const [sending, setSending] = useState(false);
-
+  
+  // create nft
   async function handleSubmit(e) {
     e.preventDefault();
     e.stopPropagation();
