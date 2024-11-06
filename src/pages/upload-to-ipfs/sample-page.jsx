@@ -15,7 +15,7 @@ export default function SamplePage() {
   return (
     <>
       <div>
-        sell NFT
+        upload to IPFS
       </div>
     </>
   );

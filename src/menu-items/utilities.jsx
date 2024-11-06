@@ -40,12 +40,27 @@ const utilities = {
       icon: icons.BarcodeOutlined
     },
     {
-      id: 'util-sell-nfts',
-      title: 'Sell NFTs',
+      id: 'util-manage-nfts',
+      title: 'Manage NFTs',
       type: 'item',
-      url: '/sell-nfts',
+      url: '/manage-nfts',
       icon: icons.BarcodeOutlined
     },
+    {
+      id: 'util-upload-to-ipfs',
+      title: 'Upload to IPFS',
+      type: 'item',
+      url: '/upload-to-ipfs',
+      icon: icons.BarcodeOutlined
+    },
+    {
+      id: 'util-manage-ipfs',
+      title: 'Manage IPFS',
+      type: 'item',
+      url: '/manage-ipfs',
+      icon: icons.BarcodeOutlined
+    }
+    
     // {
     //   id: 'util-typography',
     //   title: 'Typography',

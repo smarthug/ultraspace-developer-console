@@ -14,7 +14,9 @@ const DashboardDefault = Loadable(lazy(() => import('pages/dashboard/index')));
 const SamplePage = Loadable(lazy(() => import('pages/extra-pages/sample-page')));
 const SmartNPCsPage = Loadable(lazy(() => import('pages/smart-npcs/sample-page')));
 const CreateNFTsPage = Loadable(lazy(() => import('pages/create-nfts/sample-page')));
-const SellNFTsPage = Loadable(lazy(() => import('pages/sell-nfts/sample-page')));
+const ManageNFTsPage = Loadable(lazy(() => import('pages/manage-nfts/sample-page')));
+const UploadToIPFSPage = Loadable(lazy(() => import('pages/upload-to-ipfs/sample-page')));
+const ManageIPFSPage = Loadable(lazy(() => import('pages/manage-ipfs/sample-page')));
 
 // ==============================|| MAIN ROUTING ||============================== //
 
@@ -56,12 +58,20 @@ const MainRoutes = {
       element: <CreateNFTsPage />
     },
     {
-      path: 'sell-nfts',
-      element: <SellNFTsPage />
+      path: 'manage-nfts',
+      element: <ManageNFTsPage />
     },
     {
       path: 'smart-npcs',
       element: <SmartNPCsPage />
+    },
+    {
+      path: 'upload-to-ipfs',
+      element: <UploadToIPFSPage />
+    },
+    {
+      path: "manage-ipfs",
+      element: <ManageIPFSPage />
     }
   ]
 };
